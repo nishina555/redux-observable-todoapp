@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Todo from "./Todo";
-import { setTodos, TodoActions } from "../redux/actions";
+import { setTodos, fetchTodos, TodoActions } from "../redux/actions";
 import { RootState } from "../redux/types";
 import { connect } from "react-redux";
 import { TodoItem } from "../redux/types";
@@ -8,16 +8,13 @@ import { TodoItem } from "../redux/types";
 type TodoListProps = {
   todos: Array<TodoItem>;
   setTodos: (todos: Array<TodoItem>) => TodoActions;
+  fetchTodos: () => TodoActions;
 };
 
-const TodoList: React.FC<TodoListProps> = ({ todos, setTodos }) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, setTodos, fetchTodos }) => {
   useEffect(() => {
-    const data: Array<TodoItem> = [
-      { id: 1, content: "do something", completed: false },
-      { id: 2, content: "go somewhere", completed: false },
-    ];
-    setTodos(data);
-  }, [setTodos]);
+    fetchTodos();
+  }, []);
   return (
     <ul className="todo-list">
       {todos && todos.length
@@ -33,4 +30,4 @@ const mapStateToProps = (state: RootState) => {
   const todos = state.todos.todoItems;
   return { todos };
 };
-export default connect(mapStateToProps, { setTodos })(TodoList);
+export default connect(mapStateToProps, { setTodos, fetchTodos })(TodoList);
