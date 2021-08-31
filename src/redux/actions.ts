@@ -1,22 +1,23 @@
-import { ActionTypes } from "./actionTypes";
+import { TodoActionTypes, GetTodosType } from "./actionTypes";
 import { TodoItem } from "./types";
 
 type SetTodosAction = {
-  type: ActionTypes.SET_TODOS;
+  type: TodoActionTypes.SET_TODOS;
   payload: { todos: TodoItem[] };
 };
 
-type FetchTodoAction = {
-  type: ActionTypes.FETCH_TODOS;
-};
-
-export const fetchTodos = (): FetchTodoAction => ({
-  type: ActionTypes.FETCH_TODOS,
-});
-
 export const setTodos = (todos: TodoItem[]): SetTodosAction => ({
-  type: ActionTypes.SET_TODOS,
+  type: TodoActionTypes.SET_TODOS,
   payload: { todos },
 });
 
-export type TodoActions = SetTodosAction | FetchTodoAction;
+export type TodoActions = SetTodosAction;
+
+type GetTodosRequestAction = {
+  type: GetTodosType.GET_TODOS_REQUEST;
+};
+export const getTodosRequest = (): GetTodosRequestAction => ({
+  type: GetTodosType.GET_TODOS_REQUEST,
+});
+
+export type GetTodosActions = GetTodosRequestAction;

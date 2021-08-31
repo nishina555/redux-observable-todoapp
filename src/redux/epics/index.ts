@@ -1,4 +1,4 @@
 import { combineEpics } from "redux-observable";
-import { getTodoEpic } from "./todoEpics";
+import { getTodosEpic } from "./todoEpics";
 
-export default combineEpics(getTodoEpic);
+export default combineEpics(getTodosEpic);

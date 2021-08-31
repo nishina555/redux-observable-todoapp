@@ -1,24 +1,23 @@
 import React, { useEffect } from "react";
 import Todo from "./Todo";
-import { setTodos, fetchTodos, TodoActions } from "../redux/actions";
+import { GetTodosActions, getTodosRequest } from "../redux/actions";
 import { RootState } from "../redux/types";
 import { connect } from "react-redux";
 import { TodoItem } from "../redux/types";
 
 type TodoListProps = {
   todos: Array<TodoItem>;
-  setTodos: (todos: Array<TodoItem>) => TodoActions;
-  fetchTodos: () => TodoActions;
+  getTodosRequest: () => GetTodosActions;
 };
 
-const TodoList: React.FC<TodoListProps> = ({ todos, setTodos, fetchTodos }) => {
+const TodoList: React.FC<TodoListProps> = ({ todos, getTodosRequest }) => {
   useEffect(() => {
-    fetchTodos();
+    getTodosRequest();
   }, []);
   return (
     <ul className="todo-list">
       {todos && todos.length
-        ? todos.map((todo: any, index: any) => {
+        ? todos.map((todo: TodoItem) => {
             return <Todo key={`todo-${todo.id}`} todo={todo} />;
           })
         : "No todos, yay!"}
@@ -30,4 +29,4 @@ const mapStateToProps = (state: RootState) => {
   const todos = state.todos.todoItems;
   return { todos };
 };
-export default connect(mapStateToProps, { setTodos, fetchTodos })(TodoList);
+export default connect(mapStateToProps, { getTodosRequest })(TodoList);
