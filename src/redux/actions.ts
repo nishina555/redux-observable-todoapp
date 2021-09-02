@@ -1,5 +1,5 @@
 import { TodoActionTypes, GetTodosType, PostTodoType } from "./actionTypes";
-import { TodoItem } from "./types";
+import { TodoItem, VisibilityFilterTypes } from "./types";
 
 type SetTodosAction = {
   type: TodoActionTypes.SET_TODOS;
@@ -27,6 +27,18 @@ export const addTodo = (content: string, id: number): AddTodoAction => ({
   },
 });
 
+type SetFilterAction = {
+  type: TodoActionTypes.SET_FILTER;
+  payload: {
+    filter: VisibilityFilterTypes;
+  };
+};
+
+export const setFilter = (filter: VisibilityFilterTypes): SetFilterAction => ({
+  type: TodoActionTypes.SET_FILTER,
+  payload: { filter },
+});
+
 type GetTodosRequestAction = {
   type: GetTodosType.GET_TODOS_REQUEST;
 };
@@ -47,6 +59,6 @@ export const postTodoRequest = (input: string): PostTodoRequestAction => ({
   },
 });
 
-export type TodoActions = SetTodosAction | AddTodoAction;
+export type TodoActions = SetTodosAction | AddTodoAction | SetFilterAction;
 export type GetTodosActions = GetTodosRequestAction;
 export type PostTodoActions = PostTodoRequestAction;
