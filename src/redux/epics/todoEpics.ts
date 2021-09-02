@@ -53,15 +53,15 @@ const toggleTodoEpic: Epic<AnyAction, AnyAction, RootState> = (
     withLatestFrom(state$),
     // mergeMap([action, state])
     mergeMap(([{ payload }, { todos }]) => {
-      const index = payload.id - 1;
-      console.log(todos.todoItems[index]);
+      const targetId = payload.id;
+      const index = targetId - 1;
       const todo: PostTodoItem = {
         content: todos.todoItems[index].content,
         completed: !todos.todoItems[index].completed,
       };
       return from(
-        axios.patch(`http://localhost:4000/todos/${payload.id}`, todo)
-      ).pipe(map(() => toggleTodo(payload.id)));
+        axios.patch(`http://localhost:4000/todos/${targetId}`, todo)
+      ).pipe(map(() => toggleTodo(targetId)));
     })
   );
 export default combineEpics(getTodosEpic, postTodoEpic, toggleTodoEpic);
