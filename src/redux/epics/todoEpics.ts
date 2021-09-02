@@ -1,7 +1,13 @@
 import { combineEpics, Epic, ofType } from "redux-observable";
 import { map, mergeMap, withLatestFrom } from "rxjs/operators";
-import { GetTodosType, PostTodoType } from "../actionTypes";
-import { TodoActions, setTodos, GetTodosActions, addTodo } from "../actions";
+import { GetTodosType, PostTodoType, ToggleTodoType } from "../actionTypes";
+import {
+  TodoActions,
+  setTodos,
+  GetTodosActions,
+  addTodo,
+  toggleTodo,
+} from "../actions";
 import axios from "axios";
 import { from } from "rxjs";
 import { AnyAction } from "@reduxjs/toolkit";
@@ -38,4 +44,24 @@ const postTodoEpic: Epic<AnyAction, AnyAction, RootState> = (action$, state$) =>
     })
   );
 
-export default combineEpics(getTodosEpic, postTodoEpic);
+const toggleTodoEpic: Epic<AnyAction, AnyAction, RootState> = (
+  action$,
+  state$
+) =>
+  action$.pipe(
+    ofType(ToggleTodoType.TOGGLE_TODO_REQUEST),
+    withLatestFrom(state$),
+    // mergeMap([action, state])
+    mergeMap(([{ payload }, { todos }]) => {
+      const index = payload.id - 1;
+      console.log(todos.todoItems[index]);
+      const todo: PostTodoItem = {
+        content: todos.todoItems[index].content,
+        completed: !todos.todoItems[index].completed,
+      };
+      return from(
+        axios.patch(`http://localhost:4000/todos/${payload.id}`, todo)
+      ).pipe(map(() => toggleTodo(payload.id)));
+    })
+  );
+export default combineEpics(getTodosEpic, postTodoEpic, toggleTodoEpic);
