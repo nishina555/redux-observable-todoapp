@@ -1,4 +1,4 @@
-import { TodoActionTypes, GetTodosType } from "./actionTypes";
+import { TodoActionTypes, GetTodosType, PostTodoType } from "./actionTypes";
 import { TodoItem } from "./types";
 
 type SetTodosAction = {
@@ -11,7 +11,21 @@ export const setTodos = (todos: TodoItem[]): SetTodosAction => ({
   payload: { todos },
 });
 
-export type TodoActions = SetTodosAction;
+type AddTodoAction = {
+  type: TodoActionTypes.ADD_TODO;
+  payload: {
+    id: number;
+    content: string;
+  };
+};
+
+export const addTodo = (content: string, id: number): AddTodoAction => ({
+  type: TodoActionTypes.ADD_TODO,
+  payload: {
+    id,
+    content,
+  },
+});
 
 type GetTodosRequestAction = {
   type: GetTodosType.GET_TODOS_REQUEST;
@@ -20,4 +34,19 @@ export const getTodosRequest = (): GetTodosRequestAction => ({
   type: GetTodosType.GET_TODOS_REQUEST,
 });
 
+type PostTodoRequestAction = {
+  type: PostTodoType.POST_TODO_REQUEST;
+  payload: {
+    input: string;
+  };
+};
+export const postTodoRequest = (input: string): PostTodoRequestAction => ({
+  type: PostTodoType.POST_TODO_REQUEST,
+  payload: {
+    input,
+  },
+});
+
+export type TodoActions = SetTodosAction | AddTodoAction;
 export type GetTodosActions = GetTodosRequestAction;
+export type PostTodoActions = PostTodoRequestAction;
